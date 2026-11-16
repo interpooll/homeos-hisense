@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HomeOS Hisense</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;color:white;
+ font-family:Arial,sans-serif;
+ background:#10243b;
+ overflow-x:hidden;
+}
+body:before{
+ content:"";position:fixed;inset:0;
+ background:
+ linear-gradient(90deg,rgba(3,10,25,.72),rgba(3,10,25,.20)),
+ url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1920&q=85")
+ center/cover no-repeat;
+ z-index:-1;
+}
+header{
+ display:flex;justify-content:space-between;
+ align-items:center;padding:28px 4%;
+}
+.logo{font-size:32px;font-weight:bold}
+.logo span{color:#42dfff}
+.clock{font-size:50px;font-weight:bold}
+.date{font-size:18px}
+nav{
+ display:flex;gap:12px;padding:10px 4%;
+ flex-wrap:wrap;
+}
+button{
+ cursor:pointer;color:white;
+ background:rgba(15,25,48,.72);
+ border:2px solid rgba(255,255,255,.15);
+ border-radius:16px;
+ padding:15px 24px;font-size:19px;
+}
+button:focus,.selected{
+ outline:none;border-color:#49d9ff!important;
+ box-shadow:0 0 18px #36aaff;
+ background:rgba(54,80,160,.8);
+}
+main{padding:24px 4%}
+h2{font-size:25px}
+.apps{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:16px;
+}
+.app{
+ min-height:140px;
+ display:flex;flex-direction:column;
+ align-items:center;justify-content:center;
+ gap:12px;
+ font-size:21px;font-weight:bold;
+ backdrop-filter:blur(10px);
+}
+.app .symbol{font-size:42px}
+.youtube{background:rgba(160,0,0,.72)}
+.netflix{background:rgba(15,15,20,.86)}
+.prime{background:rgba(0,72,150,.8)}
+.browser{background:rgba(0,85,135,.8)}
+.spotify{background:rgba(10,100,55,.8)}
+.tv{background:rgba(70,45,130,.8)}
+.settings{background:rgba(70,75,90,.8)}
+.search{background:rgba(45,70,100,.8)}
+.panel{
+ margin-top:25px;padding:20px;
+ border-radius:18px;
+ background:rgba(8,18,38,.65);
+}
+.hidden{display:none}
+footer{
+ padding:22px 4%;
+ color:#e0e8f4;font-size:15px;
+}
+@media(max-width:700px){
+ .apps{grid-template-columns:repeat(2,1fr)}
+ .app{min-height:105px;font-size:17px}
+ header{align-items:flex-start}
+ .clock{font-size:30px}
+ .logo{font-size:24px}
+ button{font-size:16px;padding:12px}
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">⌂ <span>Home</span>OS</div>
+ <div style="text-align:right">
+  <div class="clock" id="clock">--:--</div>
+  <div class="date" id="date"></div>
+ </div>
+</header>
+
+<nav>
+ <button data-tab="home">⌂ Главная</button>
+ <button data-tab="apps">▦ Приложения</button>
+ <button data-tab="settings">⚙ Настройки</button>
+</nav>
+
+<main>
+<section id="home">
+ <h2>Мои приложения</h2>
+ <div class="apps">
+  <button class="app youtube"
+   data-url="https://www.youtube.com/tv">
+   <span class="symbol">▶</span>YouTube
+  </button>
+  <button class="app netflix"
+   data-url="https://www.netflix.com">
+   <span class="symbol" style="color:red">N</span>Netflix
+  </button>
+  <button class="app prime"
+   data-url="https://www.primevideo.com">
+   <span class="symbol">▶</span>Prime Video
+  </button>
+  <button class="app browser"
+   data-url="https://www.google.com">
+   <span class="symbol">🌐</span>Google
+  </button>
+  <button class="app spotify"
+   data-url="https://open.spotify.com">
+   <span class="symbol">♫</span>Spotify
+  </button>
+  <button class="app tv"
+   data-action="tv">
+   <span class="symbol">📺</span>ТВ
+  </button>
+  <button class="app search"
+   data-url="https://www.wikipedia.org">
+   <span class="symbol">🔎</span>Wikipedia
+  </button>
+  <button class="app settings"
+   data-tab="settings">
+   <span class="symbol">⚙</span>Настройки
+  </button>
+ </div>
+ <div class="panel">
+  Добро пожаловать в HomeOS!
+  <p>Перемещайся стрелками пульта и нажимай OK.</p>
+ </div>
+</section>
+
+<section id="apps" class="hidden">
+ <h2>Приложения</h2>
+ <p>Выбери «Главная», чтобы открыть плитки.</p>
+</section>
+
+<section id="settings" class="hidden">
+ <h2>Настройки HomeOS</h2>
+ <div class="panel">
+  <p>Устройство: Hisense 65E7HQ</p>
+  <p>Система: VIDAA U6.12</p>
+  <p>Тема: Горы и озеро</p>
+  <p>Версия HomeOS: 1.0</p>
+  <button data-tab="home">Вернуться на главную</button>
+ </div>
+</section>
+</main>
+
+<footer>
+ ◀ ▶ ▲ ▼ Навигация &nbsp; • &nbsp;
+ OK Выбор &nbsp; • &nbsp; Back Назад
+</footer>
+
+<script>
+const clock=document.getElementById("clock");
+const date=document.getElementById("date");
+
+function updateClock(){
+ const now=new Date();
+ clock.textContent=now.toLocaleTimeString(
+  "ru-RU",{hour:"2-digit",minute:"2-digit"}
+ );
+ date.textContent=now.toLocaleDateString(
+  "ru-RU",{
+   weekday:"long",day:"numeric",
+   month:"long",year:"numeric"
+  }
+ );
+}
+updateClock();
+setInterval(updateClock,1000);
+
+function showTab(name){
+ document.querySelectorAll("main section")
+ .forEach(s=>s.classList.add("hidden"));
+ const section=document.getElementById(name);
+ if(section)section.classList.remove("hidden");
+ const first=section?.querySelector("button");
+ if(first)first.focus();
+ else document.querySelector("nav button").focus();
+}
+
+document.addEventListener("click",e=>{
+ const b=e.target.closest("button");
+ if(!b)return;
+ if(b.dataset.tab){
+  showTab(b.dataset.tab);
+ }else if(b.dataset.url){
+  window.location.href=b.dataset.url;
+ }else if(b.dataset.action==="tv"){
+  alert("Для обычного ТВ используй кнопку TV или Input на пульте.");
+ }
+});
+
+function visibleButtons(){
+ return [...document.querySelectorAll("button")]
+ .filter(b=>b.getClientRects().length>0);
+}
+
+document.addEventListener("keydown",e=>{
+ const keys=["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"];
+ if(e.key==="Escape"||e.key==="Backspace"){
+  e.preventDefault();
+  showTab("home");
+  return;
+ }
+ if(!keys.includes(e.key))return;
+ e.preventDefault();
+
+ const buttons=visibleButtons();
+ if(!buttons.length)return;
+ const active=document.activeElement;
+ if(!buttons.includes(active)){
+  buttons[0].focus();return;
+ }
+
+ const r=active.getBoundingClientRect();
+ const cx=r.left+r.width/2;
+ const cy=r.top+r.height/2;
+ let best=null,bestScore=Infinity;
+
+ buttons.forEach(b=>{
+  if(b===active)return;
+  const q=b.getBoundingClientRect();
+  const dx=q.left+q.width/2-cx;
+  const dy=q.top+q.height/2-cy;
+  const horizontal=e.key==="ArrowLeft"||e.key==="ArrowRight";
+  const forward=e.key==="ArrowRight"||e.key==="ArrowDown";
+  const primary=horizontal?dx:dy;
+  const secondary=horizontal?dy:dx;
+  if(forward?primary<=5:primary>=-5)return;
+  const score=Math.abs(primary)+Math.abs(secondary)*2;
+  if(score<bestScore){best=b;bestScore=score;}
+ });
+ if(best)best.focus();
+});
+
+window.addEventListener("load",()=>{
+ const first=document.querySelector("nav button");
+ if(first)first.focus();
+});
+</script>
+</body>
+</html>
